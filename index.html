@@ -1,1 +1,137 @@
-<h1>Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar Audit — בדיקת הזמנות</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f7f5f0;--surface:#fff;--border:#e8e4dc;--text:#1a1a1a;--muted2:#888;--ok:#1a7a4a;--ok-bg:#edfaf3;--ok-border:#b8edd0;--warn:#b45309;--warn-bg:#fffbeb;--warn-border:#fcd34d;--danger:#c0392b;--danger-bg:#fff5f5;--danger-border:#fca5a5;--accent:#2563eb}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.top-bar{background:#1a1a1a;color:#fff;padding:14px 32px;display:flex;align-items:center;justify-content:space-between}
+.top-bar .brand{font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase}
+.top-bar .sub{font-size:11px;color:#888;letter-spacing:1px}
+.demo-tag{display:inline-block;background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:4px;border:1px solid #fcd34d}
+.container{max-width:960px;margin:0 auto;padding:32px 16px}
+.connect-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:13px;color:#1e40af}
+.controls{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px}
+.field label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted2)}
+.field input,.field select{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;background:var(--bg);color:var(--text);outline:none}
+.btn{padding:10px 24px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn.export{background:var(--ok)}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+.stat .num{font-size:32px;font-weight:900;line-height:1;margin-bottom:4px}
+.stat .lbl{font-size:11px;color:var(--muted2)}
+.stat.ok .num{color:var(--ok)}.stat.warn .num{color:var(--warn)}.stat.danger .num{color:var(--danger)}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.filter-tabs{display:flex;gap:6px}
+.tab{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;font-family:'Heebo',sans-serif}
+.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:10px 16px;text-align:right;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);background:var(--bg);border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+td{padding:12px 16px;vertical-align:middle}
+.event-title{font-weight:600;font-size:14px;margin-bottom:2px}
+.event-desc{font-size:12px;color:var(--muted2);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border)}
+.badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border)}
+.badge.danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)}
+.order-num{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:var(--accent);direction:ltr}
+.empty{color:var(--muted2);font-size:12px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="brand">Calendar Audit</div>
+  <div class="sub">בדיקת הזמנות וחשבוניות <span class="demo-tag">DEMO</span></div>
+</div>
+<div class="container">
+  <div class="connect-banner">
+    <span>📅</span>
+    <span><strong>מצב הדגמה</strong> — הנתונים הם דמה. בגרסה המלאה הכלי מתחבר לגוגל קלנדר שלכם אוטומטית.</span>
+  </div>
+  <div class="controls">
+    <div class="field"><label>מתאריך</label><input type="date" id="from" value="2025-01-01"></div>
+    <div class="field"><label>עד תאריך</label><input type="date" id="to" value="2025-06-30"></div>
+    <div class="field"><label>סינון</label>
+      <select id="filter-select">
+        <option value="all">כל הפגישות</option>
+        <option value="missing">חסר מספר הזמנה</option>
+        <option value="no-invoice">יש הזמנה — חסרה חשבונית</option>
+        <option value="ok">הכל תקין</option>
+      </select>
+    </div>
+    <button class="btn" onclick="runScan()">🔍 סרוק</button>
+    <button class="btn export" onclick="exportCSV()">⬇️ ייצא Excel</button>
+  </div>
+  <div class="summary" id="summary"></div>
+  <div class="table-wrap">
+    <div class="table-header">
+      <div class="table-title">תוצאות סריקה</div>
+      <div class="filter-tabs">
+        <button class="tab active" onclick="filterTable('all',this)">הכל</button>
+        <button class="tab" onclick="filterTable('danger',this)">חסר הזמנה</button>
+        <button class="tab" onclick="filterTable('warn',this)">חסרה חשבונית</button>
+        <button class="tab" onclick="filterTable('ok',this)">תקין</button>
+      </div>
+    </div>
+    <table><thead><tr><th>תאריך</th><th>שם פגישה</th><th>מספר הזמנה</th><th>חשבונית</th><th>סטטוס</th></tr></thead>
+    <tbody id="tbody"></tbody></table>
+  </div>
+</div>
+<script>
+const mockEvents=[
+  {date:'2025-01-08',title:'הקלטה — להקת הגשם',desc:'הזמנה 10441, 3 שעות אולפן A',order:'10441',invoice:true},
+  {date:'2025-01-15',title:'מיקס אלבום — דנה כהן',desc:'הזמנה 10442, יום עבודה מלא',order:'10442',invoice:true},
+  {date:'2025-01-22',title:'פגישת הפקה',desc:'פגישה ראשונית עם לקוח חדש',order:null,invoice:false},
+  {date:'2025-02-03',title:'הקלטת קולות — יוסי לוי',desc:'הזמנה 10443',order:'10443',invoice:false},
+  {date:'2025-02-10',title:'מאסטרינג — EP חדש',desc:'הזמנה 10444, 4 שעות',order:'10444',invoice:true},
+  {date:'2025-02-18',title:'חזרה — להקת הים',desc:'אין הזמנה עדיין',order:null,invoice:false},
+  {date:'2025-03-02',title:'הקלטה — ראם בן יוסף',desc:'הזמנה 10445',order:'10445',invoice:true},
+  {date:'2025-03-09',title:'עריכה ומיקס',desc:'המשך עבודה על פרויקט מרץ',order:null,invoice:false},
+  {date:'2025-03-20',title:'הקלטת פסנתר',desc:'הזמנה 10446, שעתיים',order:'10446',invoice:true},
+  {date:'2025-04-01',title:'סשן ג\'אם',desc:'לא מסחרי',order:null,invoice:false},
+  {date:'2025-04-14',title:'הקלטה מסחרית — פרסומת',desc:'הזמנה 10447, דחוף',order:'10447',invoice:false},
+  {date:'2025-04-22',title:'מיקס — אלבום דבות',desc:'הזמנה 10448',order:'10448',invoice:true},
+  {date:'2025-05-05',title:'הקלטת תזמורת',desc:'פרויקט גדול — ללא תיעוד',order:null,invoice:false},
+  {date:'2025-05-18',title:'פוסט פרודקשן',desc:'הזמנה 10449, סרט קצר',order:'10449',invoice:true},
+  {date:'2025-06-01',title:'הקלטה — שירי מימון',desc:'הזמנה 10450',order:'10450',invoice:false},
+  {date:'2025-06-10',title:'ישיבת תיאום',desc:'תיאום לוח שנה — ללא תשלום',order:null,invoice:false}
+];
+let currentFilter='all',currentData=[];
+function getStatus(e){if(!e.order)return'danger';if(!e.invoice)return'warn';return'ok'}
+function statusLabel(s){if(s==='ok')return'<span class="badge ok">✓ הכל תקין</span>';if(s==='warn')return'<span class="badge warn">⚠ חסרה חשבונית</span>';return'<span class="badge danger">✗ חסר הזמנה</span>'}
+function runScan(){currentData=mockEvents;renderTable(currentData,currentFilter);renderSummary(currentData)}
+function renderSummary(data){
+  const total=data.length,ok=data.filter(e=>getStatus(e)==='ok').length,warn=data.filter(e=>getStatus(e)==='warn').length,danger=data.filter(e=>getStatus(e)==='danger').length;
+  document.getElementById('summary').innerHTML=`<div class="stat total"><div class="num">${total}</div><div class="lbl">סה"כ פגישות</div></div><div class="stat ok"><div class="num">${ok}</div><div class="lbl">תקין</div></div><div class="stat warn"><div class="num">${warn}</div><div class="lbl">חסרה חשבונית</div></div><div class="stat danger"><div class="num">${danger}</div><div class="lbl">חסר הזמנה</div></div>`
+}
+function renderTable(data,filter){
+  let filtered=data;
+  if(filter==='danger')filtered=data.filter(e=>getStatus(e)==='danger');
+  else if(filter==='warn')filtered=data.filter(e=>getStatus(e)==='warn');
+  else if(filter==='ok')filtered=data.filter(e=>getStatus(e)==='ok');
+  document.getElementById('tbody').innerHTML=filtered.map(ev=>{
+    const s=getStatus(ev);
+    return`<tr><td style="white-space:nowrap;color:var(--muted2);font-size:12px">${ev.date}</td><td><div class="event-title">${ev.title}</div><div class="event-desc">${ev.desc}</div></td><td>${ev.order?`<span class="order-num">#${ev.order}</span>`:'<span class="empty">—</span>'}</td><td>${ev.order?(ev.invoice?'<span class="badge ok">✓ קיימת</span>':'<span class="badge warn">חסרה</span>'):'<span class="empty">—</span>'}</td><td>${statusLabel(s)}</td></tr>`
+  }).join('')
+}
+function filterTable(filter,btn){currentFilter=filter;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderTable(currentData,filter)}
+function exportCSV(){
+  if(!currentData.length){alert('הרץ סריקה קודם');return}
+  const rows=[['תאריך','שם פגישה','תיאור','מספר הזמנה','חשבונית','סטטוס']];
+  currentData.forEach(ev=>{const s=getStatus(ev);rows.push([ev.date,ev.title,ev.desc,ev.order||'',ev.invoice?'כן':'לא',s==='ok'?'תקין':s==='warn'?'חסרה חשבונית':'חסר הזמנה'])});
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='calendar-audit.csv';a.click()
+}
+runScan();
+</script>
+</body>
+</html>
